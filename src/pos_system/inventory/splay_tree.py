@@ -1,0 +1,24 @@
+"""Skeleton Splay Tree implementation placeholder."""
+from typing import Optional, TypeVar
+from ..common.interfaces import Node, TreeInterface
+
+T = TypeVar("T")
+
+
+class SplayTree(TreeInterface[T]):
+    """Placeholder Splay tree. Implement splaying operations here."""
+
+    def __init__(self) -> None:
+        self.root: Optional[Node[T]] = None
+
+    def insert(self, key: T, value: Optional[object] = None) -> None:
+        raise NotImplementedError
+
+    def delete(self, key: T) -> None:
+        raise NotImplementedError
+
+    def search(self, key: T) -> Optional[Node[T]]:
+        raise NotImplementedError
+
+    def traverse(self):
+        raise NotImplementedError

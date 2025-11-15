@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "adsa-g14-pos"
+version = "0.1.0"
+description = "Supermarket POS template for ADSA assignment (Group 14)"
+readme = "README.md"
+authors = [ { name = "Group 14" } ]
+license = { text = "MIT" }
+dependencies = []
