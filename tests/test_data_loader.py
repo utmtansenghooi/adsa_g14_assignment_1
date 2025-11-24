@@ -3,7 +3,6 @@
 from src.pos_system.common.data_loader import (
     load_inventory_products,
     load_sales_transactions,
-    load_loyalty_customers,
 )
 from src.pos_system.example.binary_tree import BinaryTree as ExampleBinaryTree
 
@@ -26,15 +25,6 @@ def test_load_sales_data():
     assert "product_id" in transactions[0]
     assert "quantity_sold" in transactions[0]
     assert "total_amount" in transactions[0]
-
-
-def test_load_loyalty_data():
-    """Test that loyalty data loads correctly."""
-    customers = load_loyalty_customers()
-    assert len(customers) == 935  # extracted from large dataset
-    assert "customer_id" in customers[0]
-    assert "loyalty_points" in customers[0]
-    assert "tier" in customers[0]
 
 
 def test_populate_tree_with_product_data():

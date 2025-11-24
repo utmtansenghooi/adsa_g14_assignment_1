@@ -104,6 +104,7 @@ def load_customers(file_path, bst, avl):
     except FileNotFoundError:
         log_operation(f"Customer file {file_path} not found. Starting with empty data.")
 
+
 def save_customers(file_path, bst, avl):
     # --------- Save BST customers ---------
     def save_bst():
