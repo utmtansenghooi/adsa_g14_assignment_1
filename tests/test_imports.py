@@ -7,7 +7,7 @@ def test_import_modules():
         "src.pos_system",
         "src.pos_system.common",
         "src.pos_system.inventory",
-        "src.pos_system.inventory.binary_tree",
+        "src.pos_system.inventory.binary_search_tree",
         "src.pos_system.inventory.splay_tree",
         "src.pos_system.sales",
         "src.pos_system.sales.btree",
