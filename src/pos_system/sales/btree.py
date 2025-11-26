@@ -9,6 +9,7 @@ from collections import defaultdict
 import sys
 from typing import Any, List, Optional, Tuple
 import os
+import pathlib
 
 
 ##################################
@@ -143,9 +144,8 @@ class BST:
 #print("Exists?", os.path.exists(db_path))
 #print("ODBC Path: ", pyodbc.drivers())
 
-db_path = os.path.join(os.getcwd(), "UTM_BST_data.accdb")
+db_path = os.path.join(pathlib.Path(__file__).resolve().parent, "UTM_BST_data.accdb")
 table_stored_name = "Sample_Transaction"
-
 conn = pyodbc.connect(r"Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=" + db_path + ";")
 cursor = conn.cursor()
 
@@ -282,8 +282,8 @@ while True:
             print(f"{'Supermarket POS Receipt':^60}")
             print("=" * 64)
             print(f"{'Receipt ID:'} {receipt_id:>12}")    
-            print(f"{'Date      :'} {date_time.strftime("%Y-%m-%d"):>12}")
-            print(f"{'Time      :'} {date_time.strftime("%H:%M:%S"):>12}")
+            print(f"{'Date      :'} {date_time.strftime('%Y-%m-%d'):>12}")
+            print(f"{'Time      :'} {date_time.strftime('%H:%M:%S'):>12}")
             print("-" * 64)
             print(f"{'Item':<31} {'Qty':>7} {'Price':>11} {'Sub Total':>11}")
             print("-" * 64)
@@ -327,8 +327,8 @@ while True:
                 ###        Transaction Date/Time         ###
                 ############################################
                 dt = transaction_btree['date_time']
-                date_str = dt.strftime("%Y-%m-%d")
-                time_str = dt.strftime("%H:%M:%S")
+                date_str = dt.strftime('%Y-%m-%d')
+                time_str = dt.strftime('%H:%M:%S')
                 ############################################
                     
                 print()

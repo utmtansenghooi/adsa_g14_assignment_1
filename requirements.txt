@@ -9,4 +9,5 @@ mypy>=1.0.0
 
 # Data Processing (optional)
 pandas>=1.5.0
-
+matplotlib>=3.10.7
+pyodbc>=5.3.0
