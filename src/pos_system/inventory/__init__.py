@@ -1,6 +1,6 @@
 """Inventory module: product inventory management implementations."""
 
-from .binary_tree import BinaryTree
-from .splay_tree import SplayTree
+from .binary_search_tree import BinarySearchTree, BinarySearchNode
+from .splay_tree import SplayTree, SplayNode
 
-__all__ = ["BinaryTree", "SplayTree"]
+__all__ = ["BinarySearchTree", "BinarySearchNode", "SplayTree", "SplayNode"]

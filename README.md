@@ -52,6 +52,11 @@ python scripts/extract_datasets.py
 	</tr>
 </table>
 
+### Dataset Used
+The dataset used in this project is sourced from Kaggle
+Dataset: Grocery Inventory and Sales Dataset
+Link: https://www.kaggle.com/datasets/salahuddinahmedshuvo/grocery-inventory-and-sales-dataset
+
 ### Project Structure
 
 This repository provides a complete template for the Supermarket POS application with data extraction and testing infrastructure. Each team member implements two algorithms for their assigned module.
@@ -137,7 +142,7 @@ python scripts/extract_datasets.py
 ```
 
 ### Data & Testing
-
+Grocery Inventory and Sales Dataset : https://www.kaggle.com/datasets/salahuddinahmedshuvo/grocery-inventory-and-sales-dataset
 The repository includes **990 products, 990 sales transactions, and 935 customers** for algorithm testing and performance analysis.
 
 **Data files:**
