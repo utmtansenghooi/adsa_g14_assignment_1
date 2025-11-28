@@ -99,6 +99,6 @@ class InventoryModule:
             item = node.value
             print(f"{item.product_id:<20} | {item.name:<20} | {item.category:<25} | ${item.price:<9.2f} | {item.quantity:<10}")
         print(f"Total {number_of_items} products in inventory.")
+        
 if __name__ == "__main__":
-    main = InventoryModule()
-    main.operate()
+    InventoryModule().operate()

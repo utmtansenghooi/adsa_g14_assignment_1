@@ -4,8 +4,16 @@
 # Install dependencies
 pip install -r requirements.txt
 
-# Run the POS system CLI
+# Run the POS system CLI (Inventory, Sales, Loyalty)
 python -m src.pos_system
+
+# Run specific modules only
+## Inventory module - Tan Seng Hooi (MEC245056)
+python -m src.pos_system.inventory.inventory_module
+## Sales module (Must run on Windows) - Quek Boon Siang (MEC255009)
+python -m src.pos_system.sales.bst
+## Loyalty module - Chang Choon Kit - (MEC245068)
+python -c "from src.pos_system.__main__ import loyalty_demo; loyalty_demo()"
 
 # Run all tests
 python -m pytest tests/ -v
@@ -19,9 +27,9 @@ python scripts/extract_datasets.py
 
 ## Advanced Data Structures and Algorithms (ADSA) - Assignment 1 (Group 14)
 ### Group 14 Members
-- Tan Seng Hooi
-- Quek Boon Siang
-- Chang Choon Kit
+- Tan Seng Hooi (MEC245056)
+- Quek Boon Siang (MEC255009)
+- Chang Choon Kit (MEC245068)
 ### Objectives
 - Design and implement programs in a programming language demonstrating the use of the Search Tree Structures representation
 - Analyse the complexity of algorithms and the performance of the algorithms and data structure
