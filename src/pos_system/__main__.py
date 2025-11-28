@@ -6,22 +6,25 @@ from src.pos_system.loyalty.binary_tree import BSTTree
 from src.pos_system.common.data_loader import load_customers, save_customers
 from src.pos_system.common.logger import log_operation, timed_operation
 from src.pos_system.loyalty import update_points, calculate_discount, top_n_customers, range_query
+from src.pos_system.inventory.inventory_module import InventoryModule
+from src.pos_system.sales.bst import main as SalesModule
 import os
 
 
 def inventory_demo():
-    """Inventory management demo - TODO: Implement your search tree here."""
+    """Inventory management demo by Tan Seng Hooi"""
     print("Inventory Module Demo")
-    # TODO: Load data and test your tree implementation
+    InventoryModule().operate()
 
 
 def sales_demo():
-    """Sales transactions demo - TODO: Implement your search tree here."""
+    """Sales transactions demo by Quek Boon Siang"""
     print("Sales Module Demo")
-    # TODO: Load data and test your tree implementation
+    SalesModule()
 
 
 def loyalty_demo():
+    """Loyalty transactios demo by Chang Choon Kit"""
     bst = BSTTree()
     avl = AVLTree()
 
@@ -124,6 +127,7 @@ def loyalty_demo():
         else:
             print("Invalid choice. Try again.")
 
+
 def main():
     """Main CLI entry point."""
     print("=" * 60)
@@ -133,10 +137,21 @@ def main():
     print("  1. Inventory Management")
     print("  2. Sales Transactions")
     print("  3. Customer Loyalty")
-    print("\nRun unit tests: python -m pytest tests/")
-    print("Run specific demo: python -m src.pos_system <module>")
+    while True:
+        try:
+            user_input = input("Which module would you like to use? ")
+            if user_input == "1":
+                inventory_demo()
+            elif user_input == "2":
+                sales_demo()
+            elif user_input == "3":
+                loyalty_demo()
+            else:
+                print("No such module...")
+            return
+        except (ValueError):
+            print(f"Invalid input. Please enter a valid choice.")
 
 
 if __name__ == "__main__":
-    #main()
-    loyalty_demo()
+    main()
