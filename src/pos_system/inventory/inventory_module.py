@@ -72,7 +72,7 @@ class InventoryModule:
         node = self.inventory_data_bst.search(product_id)
         end_bst = time.perf_counter()
         total_bst_duration = end_bst - start_bst
-        print(f"Item {"found" if node else "not found"} in {total_bst_duration*1000*1000:.3f}ns")
+        print(f"Item {'found' if node else 'not found'} in {total_bst_duration*1000*1000:.3f}ns")
         if node:
             item = node.value
             print(f"\n{'Product ID':<20} | {'Name':<20} | {'Category':<25} | {'Price':<10} | {'Quantity':<10}")
