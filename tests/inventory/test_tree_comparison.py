@@ -7,88 +7,17 @@ from src.pos_system.common.logger import log_operation, timed_operation
 import time
 import random
 import string
+import sys
 
-def test_tree_normal_comparison_random_100():
-    n = 100
-    
-    # Generate numbers
-    numbers = list(range(n))
-    random.shuffle(numbers)
 
-    ## Insertion comparison
-    # Build BST
-    bst = BinarySearchTree[int]()
-    start_bst = time.perf_counter()
-    for num in numbers:
-        bst.insert(num)
-    end_bst = time.perf_counter()
-    total_bst_duration = end_bst - start_bst
+# Increase recursion depth for deep trees (Scenario B)
+sys.setrecursionlimit(5000)
 
-    # Build Splay Tree
-    splay_tree = SplayTree[int]()
-    start_splay = time.perf_counter()
-    for num in numbers:
-        splay_tree.insert(num)
-    end_splay = time.perf_counter()
-    total_splay_duration = end_splay - start_splay
-
-    print()
-    print(f"BST insertion time for {n} nodes: {total_bst_duration*1000*1000:.6f} nanoseconds")
-    print(f"Splay Tree insertion time for {n} nodes: {total_splay_duration*1000*1000:.6f} nanoseconds")
-    print(f"Splay Tree was {'faster' if total_splay_duration < total_bst_duration else 'slower'} than BST by {abs(total_splay_duration - total_bst_duration)*1000*1000:.6f} nanoseconds")
-
-    ## Search comparison
-    # BST search
-    start_bst = time.perf_counter()
-    for _ in range(100): # repeat to amplify time difference
-        for num in numbers:
-            bst.search(num)
-    end_bst = time.perf_counter()
-    total_bst_duration = end_bst - start_bst
-
-    # Splay Tree search
-    start_splay = time.perf_counter()
-    for _ in range(100): # repeat to amplify time difference
-        for num in numbers:
-            splay_tree.search(num)
-    end_splay = time.perf_counter()
-    total_splay_duration = end_splay - start_splay
-
-    print()
-    print(f"BST search time for {n} nodes: {total_bst_duration*1000*1000:.6f} nanoseconds")
-    print(f"Splay Tree search time for {n} nodes: {total_splay_duration*1000*1000:.6f} nanoseconds")
-    print(f"Splay Tree was {'faster' if total_splay_duration < total_bst_duration else 'slower'} than BST by {abs(total_splay_duration - total_bst_duration)*1000*1000:.6f} nanoseconds")
-
-    ## Search 20% comparison
-    search_keys = numbers[:int(n*0.2)]
-    # BST search
-    start_bst = time.perf_counter()
-    for _ in range(100): # repeat to amplify time difference
-        for num in search_keys:
-            bst.search(num)
-    end_bst = time.perf_counter()
-    total_bst_duration = end_bst - start_bst
-
-    # Splay Tree search
-    start_splay = time.perf_counter()
-    for _ in range(100): # repeat to amplify time difference
-        for num in search_keys:
-            splay_tree.search(num)
-    end_splay = time.perf_counter()
-    total_splay_duration = end_splay - start_splay
-
-    print()
-    print(f"BST search time for 20% of {n} nodes: {total_bst_duration*1000*1000:.6f} nanoseconds")
-    print(f"Splay Tree search time for 20% of {n} nodes: {total_splay_duration*1000*1000:.6f} nanoseconds")
-    print(f"Splay Tree was {'faster' if total_splay_duration < total_bst_duration else 'slower'} than BST by {abs(total_splay_duration - total_bst_duration)*1000*1000:.6f} nanoseconds")
-
-def test_tree_insertion_search_comparison_random_100():
-    n = 100
-    
-    # Generate products
+def load_products():
+    # Load products
     product_records = load_inventory_products()
     products = []
-    for record in product_records[:n]:
+    for record in product_records:
         product = Product(
             product_id=str(record["product_id"]),
             name=str(record["name"]),
@@ -97,183 +26,252 @@ def test_tree_insertion_search_comparison_random_100():
             quantity=int(record["quantity"])
         )
         products.append(product)
+    return products
 
-    ## Insertion comparison
-    # Build BST by product ID as String
-    nodes = [BinarySearchNode(key=p.product_id, value=p) for p in products]
-    bst = BinarySearchTree[BinarySearchNode[str]]()
-    start_bst = time.perf_counter()
-    for node in nodes:
-        bst.insert(node.key, node.value)
-    end_bst = time.perf_counter()
-    total_bst_duration = end_bst - start_bst
 
-    # Build BST by product ID as Integer
-    nodes = [BinarySearchNode(key=int(p.product_id.replace("-", "")), value=p) for p in products]
-    bstint = BinarySearchTree[int]()
-    start_bstint = time.perf_counter()
-    for node in nodes:
-        bstint.insert(node.key, node.value)
-    end_bstint = time.perf_counter()
-    total_bstint_duration = end_bstint - start_bstint
-
-    # Build Splay Tree by product ID as String
-    nodes = [SplayNode(key=p.product_id, value=p) for p in products]
-    splay_tree = SplayTree[SplayNode[str]]()
-    start_splay = time.perf_counter()
-    for node in nodes:
-        splay_tree.insert(node.key, node.value)
-    end_splay = time.perf_counter()
-    total_splay_duration = end_splay - start_splay
-
-    # Build Splay Tree by product ID as Integer
-    nodes = [SplayNode(key=int(p.product_id.replace("-", "")), value=p) for p in products]
-    splayint_tree = SplayTree[int]()
-    start_splayint = time.perf_counter()
-    for node in nodes:
-        splayint_tree.insert(node.key, node.value)
-    end_splayint = time.perf_counter()
-    total_splayint_duration = end_splayint - start_splayint
-
-    print()
-    print(f"BST (STR) insertion time for {n} nodes: {total_bst_duration*1000*1000:.6f} nanoseconds")
-    print(f"Splay Tree (STR) insertion time for {n} nodes: {total_splay_duration*1000*1000:.6f} nanoseconds")
-    print(f"Splay Tree (STR) was {'faster' if total_splay_duration < total_bst_duration else 'slower'} than BST (STR) by {abs(total_splay_duration - total_bst_duration)*1000*1000:.6f} nanoseconds")
-
-    print(f"BST (INT) insertion time for {n} nodes: {total_bstint_duration*1000*1000:.6f} nanoseconds")
-    print(f"Splay Tree (INT) insertion time for {n} nodes: {total_splayint_duration*1000*1000:.6f} nanoseconds")
-    print(f"Splay Tree (INT) was {'faster' if total_splayint_duration < total_bstint_duration else 'slower'} than BST (INT) by {abs(total_splayint_duration - total_bstint_duration)*1000*1000:.6f} nanoseconds")
-
-    ## Search comparison
-    # BST STR search
-    start_bst = time.perf_counter()
-    for p in products:
-        bst.search(p.product_id)
-    end_bst = time.perf_counter()
-    total_bst_duration = end_bst - start_bst
-
-    # BST INT search
-    start_bstint = time.perf_counter()
-    for p in products:
-        bstint.search(int(p.product_id.replace("-", "")))
-    end_bstint = time.perf_counter()
-    total_bstint_duration = end_bstint - start_bstint
-
-    # Splay Tree STR search
-    start_splay = time.perf_counter()
-    for p in products:
-        splay_tree.search(p.product_id)
-    end_splay = time.perf_counter()
-    total_splay_duration = end_splay - start_splay
-
-    # Splay Tree INT search
-    start_splayint = time.perf_counter()
-    for p in products:
-        splayint_tree.search(int(p.product_id.replace("-", "")))
-    end_splayint = time.perf_counter()
-    total_splayint_duration = end_splayint - start_splayint
-
-    print()
-    print(f"BST search time for {n} nodes: {total_bst_duration*1000*1000:.6f} nanoseconds")
-    print(f"Splay Tree search time for {n} nodes: {total_splay_duration*1000*1000:.6f} nanoseconds")
-    print(f"Splay Tree was {'faster' if total_splay_duration < total_bst_duration else 'slower'} than BST by {abs(total_splay_duration - total_bst_duration)*1000*1000:.6f} nanoseconds")
-
-    print(f"BST (INT) search time for {n} nodes: {total_bstint_duration*1000*1000:.6f} nanoseconds")
-    print(f"Splay Tree (INT) search time for {n} nodes: {total_splayint_duration*1000*1000:.6f} nanoseconds")
-    print(f"Splay Tree (INT) was {'faster' if total_splayint_duration < total_bstint_duration else 'slower'} than BST (INT) by {abs(total_splayint_duration - total_bstint_duration)*1000*1000:.6f} nanoseconds")
-
-def test_tree_deletion_comparison_random_100():
-    n = 100
+def generate_tree(products):
+    # 2. Instantiate and populate the trees
+    bst = BinarySearchTree()
+    splay_tree = SplayTree()
     
-    # Generate products
-    product_records = load_inventory_products()
-    products = []
-    for record in product_records[:n]:
-        product = Product(
-            product_id=str(record["product_id"]),
-            name=str(record["name"]),
-            category=str(record["category"]),
-            price=float(record["price"]),
-            quantity=int(record["quantity"])
-        )
-        products.append(product)
-
-    # Build BST by product ID
-    nodes = [BinarySearchNode(key=p.product_id, value=p) for p in products]
-    bst = BinarySearchTree[BinarySearchNode[str]]()
-    for node in nodes:
-        bst.insert(node.key, node.value)
-
-    # Build Splay Tree by product ID
-    nodes = [SplayNode(key=p.product_id, value=p) for p in products]
-    splay_tree = SplayTree[SplayNode[str]]()
-    for node in nodes:
-        splay_tree.insert(node.key, node.value)
-
-    # Delete all nodes in both trees and time them
-    start_bst = time.perf_counter()
+    # Insert the product objects in the calculated balanced order
     for p in products:
-        bst.delete(p.product_id)
-    end_bst = time.perf_counter()
-    total_bst_duration = end_bst - start_bst
+        bst.insert(p.product_id, p)
+        splay_tree.insert(p.product_id, p)
+    
+    return bst, splay_tree
 
-    start_splay = time.perf_counter()
+
+def generate_balanced_tree(products):
+    # 1. Sort the full list of product objects based on product_id.
+    # The sorted list is now the input for the balanced insertion logic.
+    sorted_products = sorted(products, key=lambda s: s.product_id)
+
+    def _balanced_insertion(products_list, low, high, order):
+        if low > high:
+            return
+
+        # find middle element (this is the root/sub-root)
+        mid = (low + high) // 2
+        
+        # Append the actual product object from the sorted list
+        order.append(products_list[mid])
+
+        # recursively build left subtree
+        _balanced_insertion(products_list, low, mid - 1, order)
+
+        # recursively build the right subtree
+        _balanced_insertion(products_list, mid + 1, high, order)
+
+    insertion_order = []
+    # Use the sorted list of actual product objects
+    _balanced_insertion(sorted_products, 0, len(sorted_products) - 1, insertion_order)
+
+    # 2. Instantiate and populate the trees
+    bst = BinarySearchTree()
+    splay_tree = SplayTree()
+    
+    # Insert the product objects in the calculated balanced order
+    for p in insertion_order:
+        bst.insert(p.product_id, p)
+        splay_tree.insert(p.product_id, p)
+    
+    return bst, splay_tree
+
+
+def run_benchmark(scenario_name, operations, bst, splay):
+    # 1. Measure BST
+    start_time = time.perf_counter()
+    for op_type, pid, pname in operations:
+        if op_type == 'insert':
+            bst.insert(pid, pname)
+        elif op_type == 'search':
+            bst.search(pid)
+    bst_time = time.perf_counter() - start_time
+
+    # 2. Measure Splay
+    start_time = time.perf_counter()
+    for op_type, pid, pname in operations:
+        if op_type == 'insert':
+            splay.insert(pid, pname)
+        elif op_type == 'search':
+            splay.search(pid)
+    splay_time = time.perf_counter() - start_time
+
+    return (bst_time, splay_time)
+
+
+def execute_test(title, operation, products, iterations, bst=None, splay=None):
+    # Initialize BST and Splay tree
+    bst = BinarySearchTree() if bst is None else bst
+    splay = SplayTree() if splay is None else splay
+
+    # Prepare same operation sequences for both BST and Splay
+    ops = []
     for p in products:
-        splay_tree.delete(p.product_id)
-    end_splay = time.perf_counter()
-    total_splay_duration = end_splay - start_splay
+        ops.append((f'{operation}', p.product_id, p))
+    size = len(ops)
 
+    bst_times = []
+    splay_times = []
+    # log_operation(f"{title}")
+    for i in range(iterations):
+        bst_time, splay_time = run_benchmark(f"{title} [{i}]", ops, bst, splay)
+        bst_times.append(bst_time)
+        splay_times.append(splay_time)
+
+    average_bst_times = sum(bst_times)/iterations
+    average_splay_times = sum(splay_times)/iterations
+    # log_operation(f"BST {operation} {size} ({iterations} iterations): {bst_times}")
+    # log_operation(f"BST {operation} {size} average: {average_bst_times}s")
+    # log_operation(f"Splay {operation} {size} ({iterations} iterations): {splay_times}")
+    # log_operation(f"Splay {operation} {size} average: {average_splay_times}s")
+    log_operation(f"{title[:10]},{size:4},{average_bst_times:.6f},{average_splay_times:.6f}")
+
+
+def test_tree_insert_random():
+    """
+    Scenario A: Random Insert
+    Inventory: 50 | 100 | 200 | 400 | 800 | 1000 items
+    Simulates: Normal day-to-day stock entry
+    Compares: Baseline comparison of insertion speed
+    """
+    products = load_products()
+
+    # Shuffle products to produce randomized list
+    random.shuffle(products)
+
+    # Configuration for all tests
     print()
-    print(f"BST deletion time for {n} nodes: {total_bst_duration*1000*1000:.6f} nanoseconds")
-    print(f"Splay Tree deletion time for {n} nodes: {total_splay_duration*1000*1000:.6f} nanoseconds")
-    print(f"Splay Tree was {'faster' if total_splay_duration < total_bst_duration else 'slower'} than BST by {abs(total_splay_duration - total_bst_duration)*1000*1000:.6f} nanoseconds")
+    iterations = 10
+    inventory_sizes = [50, 100, 200, 400, 800, 1000]
+    for inventory in inventory_sizes:
+        p = products[:inventory]
+        execute_test(f"Scenario A: Random Insert {inventory} Dataset", "insert", p, iterations)
 
-def test_tree_search_comparison_random_100_20percent():
-    n = 100
-    
-    product_records = load_inventory_products() # load full dataset
-    products = []
-    for record in product_records[:n]:
-        product = Product(
-            product_id=str(record["product_id"]),
-            name=str(record["name"]),
-            category=str(record["category"]),
-            price=float(record["price"]),
-            quantity=int(record["quantity"])
-        )
-        products.append(product)
 
-    
-    # Build BST by product ID
-    nodes = [BinarySearchNode(key=p.product_id, value=p) for p in products]
-    bst = BinarySearchTree[BinarySearchNode[str]]()
-    for node in nodes:
-        bst.insert(node.key, node.value)
+def test_tree_insert_sorted():
+    """
+    Scenario B: Sorted Insert
+    Inventory: 50 | 100 | 200 | 400 | 800 | 1000 items
+    Simulates: Importing a sorted product list (Product IDs)
+    Compares: Force BST into worst case, minimal impact to Splay
+    """
+    products = load_products()
 
-    # Build Splay Tree by product ID
-    nodes = [SplayNode(key=p.product_id, value=p) for p in products]
-    splay_tree = SplayTree[SplayNode[str]]()
-    for node in nodes:
-        splay_tree.insert(node.key, node.value)
+    # Sort products to produce sorted list
+    products.sort(key=lambda s: s.product_id)
 
-    # Search 20% of nodes repeatedly in both trees and time them
-    search_keys = [p.product_id for p in products[:int(n*0.2)]]
-
-    start_bst = time.perf_counter()
-    for _ in range(100): # repeat to amplify time difference
-        for key in search_keys:
-            bst.search(key)
-    end_bst = time.perf_counter()
-    total_bst_duration = end_bst - start_bst
-
-    start_splay = time.perf_counter()
-    for _ in range(100): # repeat to amplify time difference
-        for key in search_keys:
-            splay_tree.search(key)
-    end_splay = time.perf_counter()
-    total_splay_duration = end_splay - start_splay
-
+    # Configuration for all tests
     print()
-    print(f"BST 20/80 search time for {n} nodes: {total_bst_duration*1000*1000:.6f} nanoseconds")
-    print(f"Splay Tree 20/80 search time for {n} nodes: {total_splay_duration*1000*1000:.6f} nanoseconds")
-    print(f"Splay Tree was {'faster' if total_splay_duration < total_bst_duration else 'slower'} than BST by {abs(total_splay_duration - total_bst_duration)*1000*1000:.6f} nanoseconds")
+    iterations = 10
+    inventory_sizes = [50, 100, 200, 400, 800, 1000]
+    for inventory in inventory_sizes:
+        p = products[:inventory]
+        execute_test(f"Scenario B: Sorted Insert {inventory} Dataset", "insert", p, iterations)
+
+
+def test_tree_search_random():
+    """
+    Scenario C: Random Search
+    Inventory: 50 | 100 | 200 | 400 | 800 | 1000 items
+    Simulates: Checking stock for random items.
+    Compares: Baseline comparison.
+    """
+    products = load_products()
+
+    # Shuffle products to produce randomized list
+    random.shuffle(products)
+
+    # Configuration for all tests
+    print()
+    iterations = 10
+    inventory_sizes = [50, 100, 200, 400, 800, 1000]
+    for inventory in inventory_sizes:
+        p = products[:inventory]
+        # Generate balanced BST and Splay tree for fair comparison
+        bst, splay = generate_balanced_tree(p)
+        execute_test(f"Scenario C: Random Search {inventory} Dataset", "search", p, iterations, bst, splay)
+
+
+def test_tree_search_20percent_random():
+    """
+    Scenario D: Search 20% of popular items randomly
+    Inventory: 50 | 100 | 200 | 400 | 800 | 1000 items
+    Simulates: The checkout counter, 80% of scans are for 20% of products
+    Compares: Demonstrate effect of dynamic tree (splay) compared to static tree
+    """
+    products = load_products()
+
+    # Shuffle products to produce randomized list
+    random.shuffle(products)
+
+    # Configuration for all tests
+    print()
+    hot_set_percentage = 20 # percent
+    iterations = 10
+    inventory_sizes = [50, 100, 200, 400, 800, 1000]
+    for inventory in inventory_sizes:
+        # Prepare hot and cold sets of products
+        p = products[:inventory]
+        split_index = int(len(p) * (hot_set_percentage/100))
+        hot_set = p[:split_index]  # The 20%
+        cold_set = p[split_index:] # The 80%
+
+        # Generate balanced BST and Splay tree for fair comparison
+        bst, splay = generate_balanced_tree(p)
+
+        # Generate skewed sequence of product search
+        s = []
+        for _ in range(inventory*100):
+            if random.random() < 0.8:
+                # 80% chance to access Hot Set
+                target = random.choice(hot_set)
+            else:
+                # 20% chance to access Cold Set
+                target = random.choice(cold_set)
+            s.append(target)
+
+        execute_test(f"Scenario D: 80/20 Skewed Search {inventory} Dataset", "search", s, iterations, bst, splay)
+
+
+def test_tree_search_20percent_sorted():
+    """
+    Scenario E: Search 20% of popular items with similar product-id (Locality of reference)
+    Inventory: 50 | 100 | 200 | 400 | 800 | 1000 items
+    Simulates: The checkout counter, 80% of scans are for 20% of products (that are pre-grouped together)
+    Compares: Demonstrate the ideal effect of dynamic tree (splay) compared to static tree
+    """
+    products = load_products()
+
+    # Sort products to produce sorted list (so that 20% of products have similar product-id)
+    products.sort(key=lambda s: s.product_id)
+
+    # Configuration for all tests
+    print()
+    hot_set_percentage = 20 # percent
+    iterations = 10
+    # inventory_sizes = [50, 100, 200, 400, 800, 1000]
+    inventory_sizes = [20]
+    for inventory in inventory_sizes:
+        # Prepare hot and cold sets of products
+        p = products[:inventory]
+        split_index = int(len(p) * (hot_set_percentage/100))
+        hot_set = p[:split_index]  # The 20%
+        cold_set = p[split_index:] # The 80%
+
+        # Generate balanced BST and Splay tree for fair comparison
+        bst, splay = generate_balanced_tree(p)
+        
+        # Generate skewed sequence of product search
+        s = []
+        for _ in range(inventory):
+            if random.random() < 0.8:
+                # 80% chance to access Hot Set
+                target = random.choice(hot_set)
+            else:
+                # 20% chance to access Cold Set
+                target = random.choice(cold_set)
+            s.append(target)
+
+        execute_test(f"Scenario E: 80/20 Skewed Grouped Search {inventory} Dataset", "search", s, iterations, bst, splay)
