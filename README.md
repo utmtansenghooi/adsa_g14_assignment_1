@@ -10,16 +10,12 @@ python -m src.pos_system
 # Run specific modules only
 ## Inventory module - Tan Seng Hooi (MEC245056)
 python -m src.pos_system.inventory.inventory_module
-## Sales module (Must run on Windows) - Quek Boon Siang (MEC255009)
-python -m src.pos_system.sales.bst
-## Loyalty module - Chang Choon Kit - (MEC245068)
-python -c "from src.pos_system.__main__ import loyalty_demo; loyalty_demo()"
 
 # Run all tests
 python -m pytest tests/ -v
 
 # Run specific test file
-python -m pytest tests/test_binary_tree.py -v
+python -m pytest tests/inventory/test_binary_tree.py -v
 
 # Extract/refresh datasets
 python scripts/extract_datasets.py
@@ -28,10 +24,6 @@ python scripts/extract_datasets.py
 ## To review codes (go to the path)
 ### Inventory module - Tan Seng Hooi (MEC245056)
 [src/pos_system/inventory](./src/pos_system/inventory)
-### Sales module (Must run on Windows) - Quek Boon Siang (MEC255009)
-[src/pos_system/sales](./src/pos_system/sales)
-### Loyalty module - Chang Choon Kit - (MEC245068)
-[src/pos_system/loyalty](./src/pos_system/loyalty)
 
 ## Advanced Data Structures and Algorithms (ADSA) - Assignment 1 (Group 14)
 ### Group 14 Members
@@ -88,17 +80,14 @@ adsa_g14_assignment_1/
 ├─ .gitignore                             # Git ignore patterns
 │
 ├─ scripts/
+|  ├─ gen_plot.py						  # Utility to generate plots from log file
 │  └─ extract_datasets.py                 # Utility to extract data from large dataset
 │
 ├─ data/
 │  ├─ common/
 │  │  └─ Grocery_Inventory_and_Sales_Dataset.csv  # Large dataset (990 rows)
-│  ├─ inventory/
-│  │  └─ products.csv                     # 990 products (extracted)
-│  ├─ sales/
-│  │  └─ transactions.csv                 # 990 transactions (extracted)
-│  └─ loyalty/
-│     └─ customers.csv                    # 935 customers (extracted)
+│  └─ inventory/
+│     └─ products.csv                     # 990 products (extracted)
 │
 ├─ src/
 │  └─ pos_system/
@@ -107,43 +96,26 @@ adsa_g14_assignment_1/
 │     │
 │     ├─ common/
 │     │  ├─ __init__.py
-│     │  ├─ Customer.py                   # Customer data class
 │     │  ├─ Product.py                    # Product data class
 │     │  ├─ interfaces.py                 # TreeInterface & Node base classes
 │     │  ├─ data_loader.py                # CSV data loading & extraction utilities
 │     │  └─ logger.py                     # Logging utilities
 │     │
-│     ├─ example/                         # Example implementations
-│     │  ├─ __init__.py
-│     │  └─ binary_tree.py                # Example binary tree implementation
-│     │
-│     ├─ inventory/                       # Product Inventory Management Module (Tan Seng Hooi)
-│     │  ├─ __init__.py
-│     │  ├─ inventory_module.py            # Main inventory module
-│     │  ├─ inventory_data_loader.py       # Inventory-specific data loader
-│     │  ├─ binary_search_tree.py          # Binary search tree implementation
-│     │  └─ splay_tree.py                  # Splay tree implementation
-│     │
-│     ├─ sales/                           # Sales Transaction and Receipt Module (Quek Boon Siang)
-│     │  ├─ __init__.py
-│     │  ├─ bst.py                        # Binary search tree implementation
-│     │  ├─ btree.py                      # B-tree implementation
-│     │  └─ UTM_BST_data.accdb            # Sales data file
-│     │
-│     └─ loyalty/                         # Customer Loyalty and Discount Module (Chang Choon Kit)
+│     └─ inventory/                       # Product Inventory Management Module (Tan Seng Hooi)
 │        ├─ __init__.py
-│        ├─ avl_tree.py                   # AVL tree implementation
-│        └─ binary_tree.py                # Binary tree implementation
+│        ├─ inventory_module.py            # Main inventory module
+│        ├─ inventory_data_loader.py       # Inventory-specific data loader
+│        ├─ binary_search_tree.py          # Binary search tree implementation
+|	     ├─ splay_tree.py         		   # Splay tree implementation
+│        └─ improved_splay_tree.py         # Improved Splay tree implementation
 │
 └─ tests/
-   ├─ test_imports.py                     # Module import smoke tests
-   ├─ test_binary_tree.py                 # BinaryTree unit tests
    ├─ test_data_loader.py                 # Data loading and integration tests
    └─ inventory/
       ├─ test_binary_search_tree.py       # Binary search tree tests
+	  ├─ test_improved_splay_tree.py      # Improved splay tree tests
       ├─ test_splay_tree.py               # Splay tree tests
-      ├─ test_tree_comparison.py          # Tree comparison and performance tests
-      └─ test_tree_libraries.py           # Tests for tree library implementations
+      └─ test_tree_comparison.py          # Tree comparison and performance tests
 ```
 
 **Guidelines:**
