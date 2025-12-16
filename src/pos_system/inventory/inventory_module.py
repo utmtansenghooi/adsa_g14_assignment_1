@@ -1,6 +1,7 @@
 import time
 from src.pos_system.inventory.inventory_data_loader import build_inventory_bst, build_inventory_splay_tree, build_inventory_improved_splay_tree, InventoryKeyType
 from src.pos_system.common.Product import Product
+from enum import Enum
 
 class DataStructureType(Enum):
     BST = 1
