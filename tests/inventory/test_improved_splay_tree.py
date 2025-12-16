@@ -1,5 +1,5 @@
 from src.pos_system.inventory.improved_splay_tree import ImprovedSplayTree, ImprovedSplayNode
-from src.pos_system.inventory.inventory_data_loader import build_inventory_splay_tree, InventoryKeyType
+from src.pos_system.inventory.inventory_data_loader import build_inventory_improved_splay_tree, InventoryKeyType
 from src.pos_system.common.Product import Product
 
 def test_splay_tree_traversal_empty_tree():
@@ -128,35 +128,25 @@ def test_splay_tree_product_insertion_name():
     assert names == ["Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape", "Honeydew", "Indian Fig"]
 
 def test_build_inventory_splay_tree():
-    splay_by_id = build_inventory_splay_tree(InventoryKeyType.PRODUCT_ID)
-    splay_by_name = build_inventory_splay_tree(InventoryKeyType.PRODUCT_NAME)
+    splay_by_id = build_inventory_improved_splay_tree(InventoryKeyType.PRODUCT_ID)
+    splay_by_name = build_inventory_improved_splay_tree(InventoryKeyType.PRODUCT_NAME)
 
     # Check that Splay Trees are not empty
     assert splay_by_id.root is not None
     assert splay_by_name.root is not None
 
-    # Check that we can search for a few known products by ID
+    # Check that we can search for a few known products by ID/name
     # sample data from data/inventory/products.csv
     samples = [
-        ("29-205-1132", "Sushi Rice"),  # col 2
-        ("40-681-9981", "Arabica Coffee"), # col 3  
-        ("06-955-3428", "Black Rice") # col 4
+        ("00009998", "Broccoli"),  # row 9999
+        ("00009999", "Nescafe"), # row 10000
+        ("00010000", "Black Coffee") # row 10001
     ]
     for pid, name in samples:
         node = splay_by_id.search(pid)
         assert node is not None
         assert node.value.product_id == pid
         assert node.value.name == name
-
-    # Check that we can search for a few known products by Name
-    # sample data from data/inventory/products.csv
-    # sample contains duplicate names, but will use the last inserted ID
-    samples = [
-        ("Sushi Rice", "93-571-7294"),  # col 639
-        ("Arabica Coffee", "59-725-4038"), # col 872
-        ("Black Rice", "45-050-4720") # col 915
-    ]
-    for name, pid in samples:
         node = splay_by_name.search(name)
         assert node is not None
         assert node.value.product_id == pid

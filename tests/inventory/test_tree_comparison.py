@@ -12,7 +12,7 @@ import sys
 
 
 # Increase recursion depth for deep trees (Scenario B)
-sys.setrecursionlimit(5000)
+sys.setrecursionlimit(100000)
 
 def load_products():
     # Load products
@@ -190,9 +190,51 @@ def test_tree_insert_sorted():
         execute_test(f"Scenario B: Sorted Insert {inventory} Dataset", "insert", p, iterations)
 
 
+def test_tree_insert_balanced():
+    """
+    Scenario C: Balanced Insert
+    Inventory: 50 | 100 | 200 | 400 | 800 | 1000 items
+    Simulates: Importing a sorted product list (Product IDs)
+    Compares: Force BST into best case, minimal impact to Splay
+    """
+    products = load_products()
+
+    # 1. Sort the full list of product objects based on product_id.
+    # The sorted list is now the input for the balanced insertion logic.
+    sorted_products = sorted(products, key=lambda s: s.product_id)
+
+    def _balanced_insertion(products_list, low, high, order):
+        if low > high:
+            return
+
+        # find middle element (this is the root/sub-root)
+        mid = (low + high) // 2
+        
+        # Append the actual product object from the sorted list
+        order.append(products_list[mid])
+
+        # recursively build left subtree
+        _balanced_insertion(products_list, low, mid - 1, order)
+
+        # recursively build the right subtree
+        _balanced_insertion(products_list, mid + 1, high, order)
+
+    insertion_order = []
+    # Use the sorted list of actual product objects
+    _balanced_insertion(sorted_products, 0, len(sorted_products) - 1, insertion_order)
+
+    # Configuration for all tests
+    print()
+    iterations = 10
+    inventory_sizes = [50, 100, 200, 400, 800, 1000]
+    for inventory in inventory_sizes:
+        p = insertion_order[:inventory]
+        execute_test(f"Scenario C: Balanced Insert {inventory} Dataset", "insert", p, iterations)
+
+
 def test_tree_search_random():
     """
-    Scenario C: Random Search
+    Scenario D: Random Search
     Inventory: 50 | 100 | 200 | 400 | 800 | 1000 items
     Simulates: Checking stock for random items.
     Compares: Baseline comparison.
@@ -210,12 +252,12 @@ def test_tree_search_random():
         p = products[:inventory]
         # Generate balanced BST and Splay tree for fair comparison
         bst, splay, isplay = generate_balanced_tree(p)
-        execute_test(f"Scenario C: Random Search {inventory} Dataset", "search", p, iterations, bst, splay, isplay)
+        execute_test(f"Scenario D: Random Search {inventory} Dataset", "search", p, iterations, bst, splay, isplay)
 
 
 def test_tree_search_20percent_random():
     """
-    Scenario D: Search 20% of popular items randomly
+    Scenario E: Search 20% of popular items randomly
     Inventory: 50 | 100 | 200 | 400 | 800 | 1000 items
     Simulates: The checkout counter, 80% of scans are for 20% of products
     Compares: Demonstrate effect of dynamic tree (splay) compared to static tree
@@ -239,7 +281,7 @@ def test_tree_search_20percent_random():
         random.shuffle(p)
 
         # Generate BST and Splay tree for fair comparison
-        bst, splay, isplay = generate_tree(p)
+        bst, splay, isplay = generate_balanced_tree(p)
 
         # Generate skewed sequence of product search
         s = []
@@ -252,12 +294,12 @@ def test_tree_search_20percent_random():
                 target = random.choice(cold_set)
             s.append(target)
 
-        execute_test(f"Scenario D: 80/20 Skewed Search {inventory} Dataset", "search", s, iterations, bst, splay, isplay)
+        execute_test(f"Scenario E: 80/20 Skewed Search {inventory} Dataset", "search", s, iterations, bst, splay, isplay)
 
 
 def test_tree_mixed_insert_search():
     """
-    Scenario E: Mixed Insert and Search Operations (50% Insert, 50% Search)
+    Scenario F: Mixed Insert and Search Operations (50% Insert, 50% Search)
     Inventory: 50 | 100 | 200 | 400 | 800 | 1000 items
     Simulates: A period of simultaneous inventory updates and product lookups.
     Compares: Overall performance under mixed load.
@@ -275,10 +317,6 @@ def test_tree_mixed_insert_search():
         # Prepare the dataset for the current inventory size
         p = products[:inventory]
 
-        # Generate initial balanced trees with the current inventory
-        # The subsequent mixed operations will act on these initial structures
-        bst, splay, isplay = generate_tree(p)
-        
         # Prepare a sequence of operations (50% Search, 50% Insert)
         # We'll use the first half of the products list for searching,
         # and the second half for inserting (as new or replacement items).
@@ -313,7 +351,7 @@ def test_tree_mixed_insert_search():
             bst_i, splay_i, isplay_i = generate_balanced_tree(p)
             
             bst_time, splay_time, isplay_time = run_benchmark(
-                f"Scenario E: Mixed Ops [{i}]", ops, bst_i, splay_i, isplay_i
+                f"Scenario F: Mixed Ops [{i}]", ops, bst_i, splay_i, isplay_i
             )
             bst_times.append(bst_time)
             splay_times.append(splay_time)
@@ -323,4 +361,4 @@ def test_tree_mixed_insert_search():
         average_splay_times = sum(splay_times)/iterations
         average_isplay_times = sum(isplay_times)/iterations
         
-        log_operation(f"Scenario E,{size:4},{average_bst_times:.6f},{average_splay_times:.6f},{average_isplay_times:.6f}")
+        log_operation(f"Scenario F,{size:4},{average_bst_times:.6f},{average_splay_times:.6f},{average_isplay_times:.6f}")

@@ -1,3 +1,3 @@
 """Supermarket POS - package initializer."""
 
-__all__ = ["common", "example", "inventory", "sales", "loyalty"]
+__all__ = ["common", "example", "inventory"]

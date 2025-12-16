@@ -122,17 +122,17 @@ def process_log_data(file_path):
         ax.set_xticks(x)
         ax.set_xticklabels(scenario_df['Iterations'].astype(str))
 
-        # Conditional log scale logic
-        time_data = scenario_df[['BST', 'Splay Tree', 'Improved Splay Tree']]
-        time_min = time_data.min().min()
-        time_max = time_data.max().max()
+        # # Conditional log scale logic
+        # time_data = scenario_df[['BST', 'Splay Tree', 'Improved Splay Tree']]
+        # time_min = time_data.min().min()
+        # time_max = time_data.max().max()
         
-        if time_min > 0 and (time_max / time_min) > 100:
-            ax.set_yscale('log')
-            ax.set_ylabel('Time Taken (seconds) - Log Scale', fontweight='bold')
-        else:
-            ax.set_ylabel('Time Taken (seconds)', fontweight='bold')
-
+        # if time_min > 0 and (time_max / time_min) > 100:
+        #     ax.set_yscale('log')
+        #     ax.set_ylabel('Time Taken (seconds) - Log Scale', fontweight='bold')
+        # else:
+        #     ax.set_ylabel('Time Taken (seconds)', fontweight='bold')
+        ax.set_ylabel('Time Taken (seconds)', fontweight='bold')
         ax.set_title(f'Performance Comparison for {scenario}', fontweight='bold')
         
         ax.legend()
